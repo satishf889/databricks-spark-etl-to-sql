@@ -14,10 +14,10 @@ This project can serve as a template for more complex ETL jobs, providing a clea
 
 ## 🛠️ Technologies Used
 
-  * **Databricks:** The unified analytics platform for building data applications.
-  * **Apache Spark:** The distributed computing engine for processing large datasets.
-  * **Python:** The primary language for scripting and data manipulation.
-  * **SQL Database:** A relational database (e.g., PostgreSQL, MySQL, or SQL Server) to store the final, processed data.
+- **Databricks:** The unified analytics platform for building data applications.
+- **Apache Spark:** The distributed computing engine for processing large datasets.
+- **Python:** The primary language for scripting and data manipulation.
+- **SQL Database:** A relational database (e.g., PostgreSQL, MySQL, or SQL Server) to store the final, processed data.
 
 ## 📂 Project Structure
 
@@ -36,36 +36,36 @@ This project is designed to be run within the Databricks environment. The main c
 
 ### **Prerequisites**
 
-  * An active **Databricks workspace**.
-  * A Databricks cluster configured with **Spark**.
-  * Access credentials for your target **SQL database**.
+- An active **Databricks workspace**.
+- A Databricks cluster configured with **Spark**.
+- Access credentials for your target **SQL database**.
 
 ### **Steps**
 
 1.  **Upload the Notebook:**
 
-      * In your Databricks workspace, click **"Workspace"** on the left sidebar.
-      * Navigate to the desired folder, right-click, and select **"Import"**.
-      * Import the `etl_pipeline_notebook.dbc` file into your workspace.
+    - In your Databricks workspace, click **"Workspace"** on the left sidebar.
+    - Navigate to the desired folder, right-click, and select **"Import"**.
+    - Import the `etl_pipeline_notebook.dbc` file into your workspace.
 
 2.  **Upload the Data:**
 
-      * Go to **"Data"** \> **"Create Table"** \> **"Upload File"**.
-      * Upload the `sales_orders.csv` file. Note the file path, as you will need it in the notebook (e.g., `/FileStore/tables/sales_orders.csv`).
+    - Go to **"Data"** \> **"Create Table"** \> **"Upload File"**.
+    - Upload the `sales_orders.csv` file. Note the file path, as you will need it in the notebook (e.g., `/FileStore/tables/sales_orders.csv`).
 
 3.  **Configure Database Connection:**
 
-      * Open the `etl_pipeline_notebook.dbc` in your workspace.
-      * Update the database connection details (host, port, username, password, and database name) in the notebook's configuration cells.
-      * Ensure the required JDBC driver is installed on your cluster or accessible via Maven.
+    - Open the `etl_pipeline_notebook.dbc` in your workspace.
+    - Update the database connection details (host, port, username, password, and database name) in the notebook's configuration cells.
+    - Ensure the required JDBC driver is installed on your cluster or accessible via Maven.
 
 4.  **Run the Pipeline:**
 
-      * Attach the notebook to your Spark cluster.
-      * Execute the cells sequentially to run the entire ETL process. The script will:
-          * Read the CSV file.
-          * Perform data transformations.
-          * Write the final data to the specified SQL database table.
+    - Attach the notebook to your Spark cluster.
+    - Execute the cells sequentially to run the entire ETL process. The script will:
+      - Read the CSV file.
+      - Perform data transformations.
+      - Write the final data to the specified SQL database table.
 
 ## 🔍 Code Snippets (Illustrative)
 
@@ -77,18 +77,6 @@ file_path = "dbfs:/FileStore/tables/sales_orders.csv"
 df_raw = spark.read.csv(file_path, header=True, inferSchema=True)
 ```
 
-### **Transforming the Data**
-
-```python
-# Example: cleaning and aggregating data
-from pyspark.sql.functions import col, sum, avg
-
-# Assuming the CSV has 'category', 'value', and 'timestamp' columns
-df_transformed = df_raw.groupBy("category") \
-                       .agg(sum("sales").alias("total_value"),
-                            avg("sales").alias("avg_value"))
-```
-
 ### **Loading into SQL Database**
 
 ```python
@@ -96,7 +84,7 @@ df_transformed = df_raw.groupBy("category") \
 df_transformed.write \
     .format("jdbc") \
     .option("url", jdbc_url) \
-    .option("dbtable", "dbo.sales_orders") \
+    .option("dbtable", "dbo.sales_data_processed") \
     .option("user", user) \
     .option("password", password) \
     .mode("overwrite") \
